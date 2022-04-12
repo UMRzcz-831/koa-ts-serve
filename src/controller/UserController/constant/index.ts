@@ -1,4 +1,5 @@
 import { Rules } from 'async-validator'
+import { MOBILE_PHONE } from '../../../utils/regex'
 export const CREATE_USER_RULE: Rules = {
   username: [
     {
@@ -13,8 +14,8 @@ export const CREATE_USER_RULE: Rules = {
     },
     {
       type: 'string',
-      max: 10,
-      message: '用户名长度不大于10',
+      max: 20,
+      message: '用户名长度不大于20',
     },
   ],
   password: [
@@ -30,8 +31,12 @@ export const CREATE_USER_RULE: Rules = {
     },
     {
       type: 'string',
-      max: 20,
-      message: '密码长度不大于20',
+      max: 32,
+      message: '密码长度不大于32',
     },
+  ],
+  mobile: [
+    { type: 'string', required: true, message: '请输入手机号' },
+    { type: 'string', pattern: MOBILE_PHONE, message: '手机号不正确' },
   ],
 }

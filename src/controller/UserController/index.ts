@@ -7,8 +7,7 @@ import { paginate } from '../../utils/paginate'
 import { isNaN } from 'lodash'
 import validate from '../../utils/validate'
 import { CREATE_USER_RULE } from './constant/index'
-import { createHash } from 'crypto'
-
+import { hashSync } from 'bcrypt'
 class UserController {
   async getPaginatedUserList(ctx: Context) {
     const params = new URLSearchParams(ctx.querystring)
@@ -54,7 +53,8 @@ class UserController {
     if (user) {
       return Response.error(ctx, '用户已存在')
     }
-    data.password = createHash('md5').update(data.password).digest('hex')
+    // data.password = createHash('md5').update(data.password).digest('hex')
+    data.password = hashSync(data.password, 12)
     const row = await UserService.addUser(data)
     if (row.id > 0) {
       return Response.success(ctx)
