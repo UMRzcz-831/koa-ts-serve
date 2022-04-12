@@ -5,7 +5,7 @@ import UserController from '../controller/UserController'
 import AuthMiddleware from '../middlewares/Auth'
 const router = new Router({ prefix: '/serve' })
 
-router.post('/login', LoginController.index)
+router.post('/user/login', LoginController.index)
 router.post('/user/regist', UserController.createUser)
 router.use(AuthMiddleware)
 router.get('/getUser', IndexController.getUserById)

@@ -40,10 +40,28 @@ class UserService {
     })
   }
 
+  /**
+   * 根据用户名查询
+   * @param username 
+   * @returns 
+   */
   async getUserByName(username: string) {
     return User.findOne({
       where: {
         username,
+      },
+    })
+  }
+
+  /**
+   * 根据手机号查询
+   * @param mobile 
+   * @returns 
+   */
+  async getUserByMobile(mobile: string) {
+    return User.findOne({
+      where: {
+        mobile,
       },
     })
   }
