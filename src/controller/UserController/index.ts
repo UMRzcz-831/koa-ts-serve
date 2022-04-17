@@ -8,6 +8,8 @@ import { isNaN } from 'lodash'
 import validate from '../../utils/validate'
 import { CREATE_USER_RULE } from './constant/index'
 import { hashSync } from 'bcrypt'
+import { IPreference } from '../PreferenceController/types'
+import PreferenceService from '../../service/PreferenceService'
 class UserController {
   async getPaginatedUserList(ctx: Context) {
     const params = new URLSearchParams(ctx.querystring)
@@ -57,10 +59,18 @@ class UserController {
     data.password = hashSync(data.password, 12)
     const row = await UserService.addUser(data)
     if (row.id > 0) {
-      return Response.success(ctx)
+      const defaultPreference: IPreference = {
+        userId: row.id,
+        theme: '1',
+        nickname: row.getDataValue('username'),
+      }
+      const preference = await PreferenceService.addPreference(defaultPreference)
+      if (preference.id > 0) {
+        return Response.success(ctx)
+      }
+      return Response.error(ctx, '用户新增失败')
     }
     return Response.error(ctx, '用户新增失败')
-    // ctx.body = user
   }
 }
 
