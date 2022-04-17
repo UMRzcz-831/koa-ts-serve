@@ -34,7 +34,7 @@ class LoginController {
         return Response.error(ctx, '手机号未填写')
       }
     }
-
+    // user 不存在  或者 密码不正确 返回错误
     if (user) {
       const isValid = compareSync(data.password, user.getDataValue('password'))
       if (!isValid) {
