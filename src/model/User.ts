@@ -1,12 +1,18 @@
-import {Column, Model, Table} from 'sequelize-typescript'
+import { Column, Model, Table, BelongsTo, ForeignKey } from 'sequelize-typescript'
+import Preference from './Preference'
 
 @Table
 export default class User extends Model {
+  @ForeignKey(() => Preference)
+  @Column
+  preferenceId!: number
 
-    @Column
-    username!: string
-    @Column
-    password!: string
-    @Column
-    mobile?: string
+  @BelongsTo(() => Preference)
+  preferenceInfo!: Preference
+  @Column
+  username!: string
+  @Column
+  password!: string
+  @Column
+  mobile?: string
 }
