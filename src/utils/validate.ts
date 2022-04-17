@@ -14,6 +14,9 @@ async function validate<T extends Values>(
     case 'POST':
       data = getFormData(ctx)
       break
+    case 'PUT':
+      data = getFormData(ctx)
+      break
     case 'DELETE':
       break
   }
