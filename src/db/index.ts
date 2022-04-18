@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize-typescript'
 import { join } from 'path'
 import { config } from '../config'
 
-const sequelize = new Sequelize(config.db.database, 'root', '', {
+const sequelize = new Sequelize(config.db.database, config.db.username, config.db.password, {
   host: 'localhost',
   port: 3306,
   dialect: 'mysql',
