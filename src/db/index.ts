@@ -3,7 +3,7 @@ import { join } from 'path'
 import { config } from '../config'
 
 const sequelize = new Sequelize(config.db.database, config.db.username, config.db.password, {
-  host: 'localhost',
+  host: config.db.host,
   port: 3306,
   dialect: 'mysql',
   models: [join(__dirname, '..', 'model/**/*.ts'), join(__dirname, '..', 'model/**/*.js')],
