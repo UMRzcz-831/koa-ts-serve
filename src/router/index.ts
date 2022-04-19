@@ -1,4 +1,5 @@
 import Router from 'koa-router'
+import DeviceController from '../controller/DeviceController'
 import IndexController from '../controller/IndexController'
 import LoginController from '../controller/LoginController'
 import PreferenceController from '../controller/PreferenceController'
@@ -14,5 +15,10 @@ router.put('/preference/update/:id', PreferenceController.UpdatePreferenceByUser
 router.use(AuthMiddleware)
 router.get('/getUser', IndexController.getUserById)
 router.get('/getUser/list', UserController.getPaginatedUserList)
+
+// 绑定设备
+router.post('/device/bindDevice', DeviceController.BindDevice)
+// 获取设备列表
+router.get('/device/list', DeviceController.QueryDeviceByUserId)
 
 export default router
