@@ -22,17 +22,32 @@ class DeviceService {
     }
   }
 
+  // 查询用户绑定的设备
   async queryDeviceByUserId(userId: number) {
     return await UserDevice.findAll({
       where: { userId },
       include: [
         {
           model: Device,
-          attributes: ['hostname', 'alias', 'osPlatform', 'osVersion', 'osAdmin', 'ip'],
+          attributes: ['hostname', 'alias'],
         },
       ],
     })
   }
+
+  async queryDevice(deviceId: number) {
+    return await Device.findOne({ where: { id: deviceId } })
+  }
+
+  async updateDevice(deviceId: number, val: IDevice) {
+    return await Device.update(val, { where: { id: deviceId } })
+  }
+
+  // 解绑设备
+  async unbindDevice(deviceId: number, userId: number) {
+    return await UserDevice.destroy({ where: { deviceId, userId } })
+  }
+
 }
 
 export default new DeviceService()
