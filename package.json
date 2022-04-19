@@ -10,7 +10,7 @@
     "build": "npm-run-all resetFolder compile",
     "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pm2": "pm2 start src/index.js --name umr-koa-server --watch",
+    "pm2": "pm2 start dist/index.js --name umr-koa-server --watch",
     "pm2:restart": "pm2 restart umr-koa-server"
   },
   "keywords": [],
