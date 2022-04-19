@@ -5,3 +5,12 @@ dist
 *.code-workspace
 .vscode
 logs
+
+# env
+.env
+.env.*
+# sql
+*.sql
+
+
+yarn.lock
