@@ -8,6 +8,7 @@ import DeviceService from '../../service/DeviceService'
 
 class DeviceController {
   async BindDevice(ctx: Context) {
+    const { ip = '' } = ctx.request
     const { authorization = '' } = ctx.headers
     const { data, error } = verify(authorization)
     if (!data || error) {
@@ -18,9 +19,7 @@ class DeviceController {
     if (deviceError) {
       return Response.error(ctx, deviceError)
     }
-    console.log('data', deviceData, userId)
-
-    const row = await DeviceService.bindDevice(deviceData, userId)
+    const row = await DeviceService.bindDevice({ ...deviceData, ip }, userId)
     if (row.getDataValue('userId') > 0) {
       return Response.success(ctx, row, '绑定成功')
     } else {
