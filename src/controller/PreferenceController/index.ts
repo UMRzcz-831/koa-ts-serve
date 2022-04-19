@@ -5,6 +5,7 @@ import { IPreference } from './types'
 import { CREATE_PREFERENCE_RULE, UPDATE_PREFERENCE_RULE } from './constant/index'
 import UserService from '../../service/UserService'
 import PreferenceService from '../../service/PreferenceService'
+import { verify } from '../../utils/auth'
 
 class PreferenceController {
   async CreatePreference(ctx: Context) {
@@ -28,12 +29,14 @@ class PreferenceController {
   }
 
   async GetPreferenceByUserId(ctx: Context) {
-    const id = Number(ctx.params.id)
-    if (isNaN(id)) {
-      Response.error(ctx, 'id 参数错误')
-      return
+    const { authorization = '' } = ctx.headers
+    const { data, error } = verify(authorization)
+    if (!data || error) {
+      return Response.error(ctx, 'token验证失败')
     }
-    const row = await PreferenceService.queryPreferenceByUserId(id)
+    const { id: userId } = data.user
+
+    const row = await PreferenceService.queryPreferenceByUserId(userId)
     if (row) {
       Response.success(ctx, row)
     } else {
