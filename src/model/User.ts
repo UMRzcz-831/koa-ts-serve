@@ -1,5 +1,18 @@
-import { Column, Model, Table, BelongsTo, ForeignKey } from 'sequelize-typescript'
+import { Column, Model, Table, BelongsTo, ForeignKey,Scopes, BelongsToMany } from 'sequelize-typescript'
 import Preference from './Preference'
+import Device from './Device'
+import UserDevice from './UserDevice'
+
+@Scopes(() => ({
+  devices: {
+    include: [
+      {
+        model: Device,
+        through: { attributes: [] },
+      },
+    ],
+  },
+}))
 
 @Table
 export default class User extends Model {
@@ -9,6 +22,10 @@ export default class User extends Model {
 
   @BelongsTo(() => Preference)
   preferenceInfo!: Preference
+
+  @BelongsToMany(() => Device, () => UserDevice)
+  devices!: Device[]
+
   @Column
   username!: string
   @Column
