@@ -21,6 +21,8 @@ const wss = new WebSocket.Server({
 })
 
 db()
+// 反向代理 ip配置
+app.proxy = true
 
 // ctx.body
 app.use(
@@ -48,7 +50,7 @@ app.use(async (ctx: Koa.Context): Promise<void> => {
 })
 
 WSApi(wss)
-server.listen((Number(config.serve.port)), '0.0.0.0',10, () => {
+server.listen(Number(config.serve.port), '0.0.0.0', 10, () => {
   console.log(`server is running at http://localhost:${config.serve.port}`)
 })
 // app.listen(config.serve.port)
