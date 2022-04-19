@@ -20,6 +20,7 @@ const wss = new WebSocket.Server({
   server,
 })
 
+
 db()
 
 // ctx.body
@@ -48,7 +49,5 @@ app.use(async (ctx: Koa.Context): Promise<void> => {
 })
 
 WSApi(wss)
-server.listen((Number(config.serve.port)), '0.0.0.0',10, () => {
-  console.log(`server is running at http://localhost:${config.serve.port}`)
-})
+server.listen(config.serve.port)
 // app.listen(config.serve.port)
