@@ -25,6 +25,8 @@ router.put('/preference/update', PreferenceController.UpdatePreferenceByUserId)
 router.post('/device/bindDevice', DeviceController.BindDevice)
 // 获取设备列表
 router.get('/device/list', DeviceController.QueryDeviceByUserId)
+// 获取设备详情
+router.get('/device/:deviceId', DeviceController.QueryDeviceByDeviceId)
 // 解绑
 router.delete('/device/unbind/:deviceId', DeviceController.UnbindDevice)
 // 更新
