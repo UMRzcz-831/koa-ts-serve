@@ -6,6 +6,7 @@ import Response from '../../utils/response'
 import { LOGIN_USER_RULE } from './constant'
 import { IUser } from './types'
 import { compareSync } from 'bcrypt'
+import { logger } from '../../middlewares/log4j'
 
 class LoginController {
   /**
@@ -34,15 +35,18 @@ class LoginController {
         return Response.error(ctx, '手机号未填写')
       }
     }
+    logger.info('获取用户', user?.get())
     // user 不存在  或者 密码不正确 返回错误
     if (user) {
       const isValid = compareSync(data.password, user.getDataValue('password'))
       if (!isValid) {
+        logger.error('密码错误')
         return Response.error(ctx, '密码错误')
       }
       const token = sign(user)
       return Response.success(ctx, { token })
     } else {
+      logger.error('登录失败', '用户不存在')
       return Response.error(ctx, '用户不存在')
     }
   }
