@@ -5,7 +5,7 @@ import validate from '../../utils/validate'
 import Response from '../../utils/response'
 import { LOGIN_USER_RULE } from './constant'
 import { IUser } from './types'
-import { compareSync } from 'bcrypt'
+import { compareSync } from 'bcryptjs'
 import { logger } from '../../middlewares/log4j'
 
 class LoginController {
