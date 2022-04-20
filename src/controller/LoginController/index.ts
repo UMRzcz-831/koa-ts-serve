@@ -35,10 +35,15 @@ class LoginController {
         return Response.error(ctx, '手机号未填写')
       }
     }
-    logger.info('获取用户', user?.get())
+    logger.info('获取用户', user?.get('username'))
     // user 不存在  或者 密码不正确 返回错误
     if (user) {
-      const isValid = compareSync(data.password, user.getDataValue('password'))
+      let isValid = false
+      try {
+        isValid = compareSync(data.password, user.getDataValue('password'))
+      } catch (error) {
+        logger.error('密码校验失败', error)
+      }
       if (!isValid) {
         logger.error('密码错误')
         return Response.error(ctx, '密码错误')
