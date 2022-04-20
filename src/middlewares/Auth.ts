@@ -11,6 +11,7 @@ function AuthMiddleware(ctx: Context, next: Next) {
       ctx.body = {
         msg: message,
         code: 401,
+        success: false,
       }
       return
     }
@@ -19,6 +20,7 @@ function AuthMiddleware(ctx: Context, next: Next) {
   ctx.body = {
     msg: 'authorization 不可为空',
     code: 401,
+    success: false,
   }
   return
 }
