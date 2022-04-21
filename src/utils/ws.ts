@@ -61,6 +61,6 @@ export default (wss: Server) => {
       ws.terminate()
     }, 1000 * 60 * 60)
 
-    ws.send('call it connected')
+    // ws.send('call it connected')
   })
 }
