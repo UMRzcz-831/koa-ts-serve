@@ -1,4 +1,4 @@
-import { Column, Model, Table, BelongsTo, ForeignKey } from 'sequelize-typescript'
+import { Column, Model, Table, ForeignKey } from 'sequelize-typescript'
 import { ThemeName } from '../config/constant'
 import User from './User'
 

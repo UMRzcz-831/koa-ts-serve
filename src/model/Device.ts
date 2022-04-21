@@ -1,4 +1,5 @@
-import { Column, Model, Table, BelongsToMany, Scopes, ForeignKey } from 'sequelize-typescript'
+import { Column, Model, Table, BelongsToMany, Scopes } from 'sequelize-typescript'
+import moment from 'moment'
 import User from './User'
 import UserDevice from './UserDevice'
 
@@ -34,4 +35,14 @@ export default class Device extends Model {
 
   @Column
   ip!: string
+
+  @Column
+  get bindAt(): string {
+    return moment(this.getDataValue('createdAt')).format('YYYY-MM-DD HH:mm:ss')
+  }
+
+  @Column
+  get lastConnectedAt(): string {
+    return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm:ss')
+  }
 }

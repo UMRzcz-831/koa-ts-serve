@@ -36,7 +36,19 @@ class DeviceService {
   }
 
   async queryDevice(deviceId: number) {
-    return await Device.findOne({ where: { id: deviceId } })
+    return await Device.findOne({
+      where: { id: deviceId },
+      attributes: [
+        'bindAt',
+        'lastConnectedAt',
+        'hostname',
+        'alias',
+        'osPlatform',
+        'osVersion',
+        'osAdmin',
+        'ip',
+      ],
+    })
   }
 
   async updateDevice(deviceId: number, val: IDevice) {
@@ -47,7 +59,6 @@ class DeviceService {
   async unbindDevice(deviceId: number, userId: number) {
     return await UserDevice.destroy({ where: { deviceId, userId } })
   }
-
 }
 
 export default new DeviceService()
