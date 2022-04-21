@@ -17,7 +17,7 @@ const sequelize = new Sequelize(config.db.database, config.db.username, config.d
 const db = async () => {
   try {
     await sequelize.authenticate()
-    console.log('success')
+    console.log('database connect success')
     if (process.env.NODE_ENV === 'development') {
       await sequelize.sync({ alter: true }) // 根据模型同步创建表,生成环境需要关闭
       console.log('table sync done')
