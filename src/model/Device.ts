@@ -38,11 +38,11 @@ export default class Device extends Model {
 
   @Column
   get bindAt(): string {
-    return moment(this.getDataValue('createdAt')).format('YYYY-MM-DD HH:mm:ss')
+    return moment(this.getDataValue('created_at')).format('YYYY-MM-DD HH:mm:ss')
   }
 
   @Column
   get lastConnectedAt(): string {
-    return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm:ss')
+    return moment(this.getDataValue('updated_at')).format('YYYY-MM-DD HH:mm:ss')
   }
 }

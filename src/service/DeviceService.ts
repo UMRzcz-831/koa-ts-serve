@@ -49,17 +49,6 @@ class DeviceService {
   async queryDevice(deviceId: number) {
     return await Device.findOne({
       where: { id: deviceId },
-      attributes: [
-        'id',
-        'bindAt',
-        'lastConnectedAt',
-        'hostname',
-        'alias',
-        'osPlatform',
-        'osVersion',
-        'osAdmin',
-        'ip',
-      ],
     })
   }
 
