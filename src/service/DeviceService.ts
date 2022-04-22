@@ -39,6 +39,7 @@ class DeviceService {
     return await Device.findOne({
       where: { id: deviceId },
       attributes: [
+        'id',
         'bindAt',
         'lastConnectedAt',
         'hostname',
