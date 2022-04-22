@@ -40,6 +40,10 @@ export default (wss: Server) => {
           ws.sendRemote = code2Ws.get(remote).sendData
           // @ts-ignore
           ws.sendRemote('beControlled', { remote: code })
+        } else {
+          console.log('remote not found', remote)
+          // @ts-ignore
+          ws.sendData('remoteNotFound', { remote })
         }
       } else if (event === 'forward') {
         // @ts-ignore
