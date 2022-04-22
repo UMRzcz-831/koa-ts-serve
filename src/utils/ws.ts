@@ -31,8 +31,7 @@ export default (wss: Server) => {
       if (event === 'registLocal') {
         // @ts-ignore
         ws.sendData('registed', { code })
-      }
-      if (event === 'control') {
+      } else if (event === 'control') {
         let remote = +data.remote
         if (code2Ws.has(remote)) {
           // @ts-ignore
@@ -42,12 +41,14 @@ export default (wss: Server) => {
           // @ts-ignore
           ws.sendRemote('beControlled', { remote: code })
         }
-      }
-
-      if (event === 'forward') {
+      } else if (event === 'forward') {
         // @ts-ignore
-        ws.sendRemote(event, data)
+        ws.sendRemote(data.event, data)
       }
+    })
+
+    ws.on('error', (err: Error) => {
+      console.log('error', err)
     })
 
     ws.on('close', () => {
