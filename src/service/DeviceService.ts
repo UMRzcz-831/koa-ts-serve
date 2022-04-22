@@ -35,6 +35,17 @@ class DeviceService {
     })
   }
 
+  async queryDeviceByMultipe(val:IDevice) {
+    return await Device.findAll({
+      where: {
+        hostname: val.hostname,
+        osPlatform: val.osPlatform,
+        osVersion: val.osVersion,
+        osAdmin: val.osAdmin,
+      },
+    })
+  }
+
   async queryDevice(deviceId: number) {
     return await Device.findOne({
       where: { id: deviceId },

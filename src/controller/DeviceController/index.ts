@@ -9,8 +9,8 @@ import DeviceService from '../../service/DeviceService'
 class DeviceController {
   /**
    * 绑定设备
-   * @param ctx 
-   * @returns 
+   * @param ctx
+   * @returns
    */
   async BindDevice(ctx: Context) {
     const { ip = '' } = ctx.request
@@ -24,6 +24,10 @@ class DeviceController {
     if (deviceError) {
       return Response.error(ctx, deviceError)
     }
+    const hasOne = await DeviceService.queryDeviceByMultipe(deviceData)
+    if (hasOne) {
+      return Response.error(ctx, '设备已绑定')
+    }
     const row = await DeviceService.bindDevice({ ...deviceData, ip }, userId)
     if (row.getDataValue('userId') > 0) {
       return Response.success(ctx, row, '绑定成功')
@@ -34,8 +38,8 @@ class DeviceController {
 
   /**
    * 查询设备列表
-   * @param ctx 
-   * @returns 
+   * @param ctx
+   * @returns
    */
   async QueryDeviceByUserId(ctx: Context) {
     const { authorization = '' } = ctx.headers
@@ -50,8 +54,8 @@ class DeviceController {
 
   /**
    * 查询设备详情
-   * @param ctx 
-   * @returns 
+   * @param ctx
+   * @returns
    */
   async QueryDeviceByDeviceId(ctx: Context) {
     const deviceId = Number(ctx.params.deviceId)
@@ -68,8 +72,8 @@ class DeviceController {
 
   /**
    * 更新设备信息
-   * @param ctx 
-   * @returns 
+   * @param ctx
+   * @returns
    */
   async UpdateDevice(ctx: Context) {
     const { ip = '' } = ctx.request
@@ -77,12 +81,12 @@ class DeviceController {
     if (isNaN(deviceId)) {
       return Response.error(ctx, 'deviceId 参数错误')
     }
-    
+
     const { data: deviceData, error: deviceError } = await validate<IDevice>(ctx, BIND_DEVICE_RULE)
     if (deviceError) {
       return Response.error(ctx, deviceError)
     }
-    const row = await DeviceService.updateDevice(deviceId, { ...deviceData, ip})
+    const row = await DeviceService.updateDevice(deviceId, { ...deviceData, ip })
     if (row) {
       return Response.success(ctx, row, '更新成功')
     } else {
@@ -90,11 +94,10 @@ class DeviceController {
     }
   }
 
-
   /**
    * 解绑设备
-   * @param ctx 
-   * @returns 
+   * @param ctx
+   * @returns
    */
   async UnbindDevice(ctx: Context) {
     const { authorization = '' } = ctx.headers
