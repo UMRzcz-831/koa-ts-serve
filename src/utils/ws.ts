@@ -11,6 +11,8 @@ const code2Ws = new Map<number, WebSocket>()
 export default (wss: Server) => {
   wss.on('connection', function connection(ws) {
     const code = generateCode()
+    let beControlledCode: number
+
     code2Ws.set(code, ws)
     console.log('in map', code2Ws.keys())
     // @ts-ignore
@@ -34,20 +36,20 @@ export default (wss: Server) => {
       } else if (event === 'control') {
         let remote = +data.remote
         if (code2Ws.has(remote)) {
-          // @ts-ignore
+          // @ts-ignore   发给控制端，被控端的code
           ws.sendData('controlled', { remote })
-          // @ts-ignore
-          ws.sendRemote = code2Ws.get(remote).sendData
-          // @ts-ignore
-          ws.sendRemote('beControlled', { remote: code })
+          beControlledCode = remote
+          // @ts-ignore  被控端的ws发给被控制的客户端端，控制端的code
+          code2Ws.get(remote).sendData('beControlled', { remote: code })
         } else {
           console.log('remote not found', remote)
           // @ts-ignore
           ws.sendData('remoteNotFound', { remote })
         }
       } else if (event === 'forward') {
+        console.log('forward', beControlledCode)
         // @ts-ignore
-        ws.sendRemote(data.event, data)
+        code2Ws.get(beControlledCode).sendData(data.event, data)
       }
     })
 
