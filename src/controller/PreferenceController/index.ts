@@ -44,18 +44,18 @@ class PreferenceController {
     }
   }
   async UpdatePreferenceByUserId(ctx: Context) {
-    const id = Number(ctx.params.id)
-    if (isNaN(id)) {
-      Response.error(ctx, 'id 参数错误')
-      return
+    const { authorization = '' } = ctx.headers
+    const { data, error } = verify(authorization)
+    if (!data || error) {
+      return Response.error(ctx, 'token验证失败')
     }
-    const user = await UserService.getUserById(id)
-    if (user) {
+    const { id: userId } = data.user
+    if (userId) {
       const { data, error: err } = await validate<IPreference>(ctx, UPDATE_PREFERENCE_RULE)
       if (err) {
         return Response.error(ctx, err)
       }
-      const row = await PreferenceService.updatePreferenceByUserId({ ...data, userId: id })
+      const row = await PreferenceService.updatePreferenceByUserId({ ...data, userId })
       if (row) {
         return Response.success(ctx)
       } else {
