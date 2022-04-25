@@ -26,11 +26,23 @@ class DeviceController {
     }
     const hasOne = await DeviceService.queryDeviceByMultipe(deviceData)
     if (hasOne) {
-      return Response.error(ctx, '设备已绑定')
+      const hasUser = await DeviceService.queryUserDeviceBinding(userId, hasOne.id)
+      if (hasUser) {
+        if (hasUser.getDataValue('id')) {
+          return Response.error(ctx, '用户已绑定该设备')
+        }
+      } else {
+        const row = await DeviceService.bindExistDevice(userId, hasOne.id)
+        if (row.getDataValue('userId') > 0) {
+          return Response.success(ctx, row, '绑定成功')
+        } else {
+          return Response.error(ctx, '绑定失败')
+        }
+      }
     }
     const row = await DeviceService.bindDevice({ ...deviceData, ip }, userId)
     if (row.getDataValue('userId') > 0) {
-      return Response.success(ctx, row, '绑定成功')
+      return Response.success(ctx, row, '绑定新设备成功')
     } else {
       return Response.error(ctx, '绑定失败')
     }

@@ -22,6 +22,10 @@ class DeviceService {
     }
   }
 
+  async bindExistDevice(userId: number, deviceId: number) {
+    return await UserDevice.create({ userId, deviceId })
+  }
+
   // 查询用户绑定的设备
   async queryDeviceByUserId(userId: number) {
     return await UserDevice.findAll({
@@ -35,14 +39,20 @@ class DeviceService {
     })
   }
 
-  async queryDeviceByMultipe(val:IDevice) {
-    return await Device.findAll({
+  async queryDeviceByMultipe(val: IDevice) {
+    return await Device.findOne({
       where: {
         hostname: val.hostname,
         osPlatform: val.osPlatform,
         osVersion: val.osVersion,
         osAdmin: val.osAdmin,
       },
+    })
+  }
+
+  async queryUserDeviceBinding(userId: number, deviceId: number) {
+    return await UserDevice.findOne({
+      where: { userId, deviceId },
     })
   }
 
