@@ -1,5 +1,6 @@
 import Router from 'koa-router'
 import DeviceController from '../controller/DeviceController'
+import FileUploadController from '../controller/FileUploadController'
 import IndexController from '../controller/IndexController'
 import LoginController from '../controller/LoginController'
 import PreferenceController from '../controller/PreferenceController'
@@ -11,6 +12,10 @@ router.post('/user/login', LoginController.index)
 router.post('/user/regist', UserController.createUser)
 
 router.use(AuthMiddleware)
+// 上传
+router.post('/upload',FileUploadController.upload)
+
+
 router.get('/getUser', IndexController.getUserById)
 router.get('/getUser/list', UserController.getPaginatedUserList)
 
