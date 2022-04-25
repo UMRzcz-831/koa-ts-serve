@@ -28,7 +28,7 @@ class DeviceController {
     if (hasOne) {
       const hasUser = await DeviceService.queryUserDeviceBinding(userId, hasOne.id)
       if (hasUser) {
-        if (hasUser.getDataValue('id')) {
+        if (hasUser.getDataValue('deviceId')) {
           return Response.error(ctx, '用户已绑定该设备')
         }
       } else {
