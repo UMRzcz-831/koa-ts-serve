@@ -2,16 +2,18 @@ import { Server, WebSocket } from 'ws'
 
 const generateCode = () => {
   // mock 随机code
-  const code = Math.floor(Math.random() * 999999999 - 100000000) + 100000000
+  const code = Math.floor(Math.random() * (999999999 - 100000000)) + 100000000
   return code
 }
 
 const code2Ws = new Map<number, WebSocket>()
 
+const oppositeMap: Record<number, undefined | number> = {}
+
 export default (wss: Server) => {
   wss.on('connection', function connection(ws) {
     const code = generateCode()
-    let beControlledCode: number
+    // let beControlledCode: number
 
     code2Ws.set(code, ws)
     console.log('in map', code2Ws.keys())
@@ -38,7 +40,11 @@ export default (wss: Server) => {
         if (code2Ws.has(remote)) {
           // @ts-ignore   发给控制端，被控端的code
           ws.sendData('controlled', { remote })
-          beControlledCode = remote
+          // beControlledCode = remote
+
+          oppositeMap[remote] = code
+          oppositeMap[code] = remote
+
           // @ts-ignore  被控端的ws发给被控制的客户端端，控制端的code
           code2Ws.get(remote).sendData('beControlled', { remote: code })
         } else {
@@ -47,9 +53,15 @@ export default (wss: Server) => {
           ws.sendData('remoteNotFound', { remote })
         }
       } else if (event === 'forward') {
-        console.log('forward', beControlledCode)
+        code2Ws.forEach((o, k) => {
+          if (o === ws) {
+            console.log(k, 'forward send to', oppositeMap[k], data.event)
+            // @ts-ignore
+            code2Ws.get(oppositeMap[k]).sendData(data.event, data)
+          }
+        })
         // @ts-ignore
-        code2Ws.get(beControlledCode).sendData(data.event, data)
+        // code2Ws.get(beControlledCode).sendData(data.event, data)
       }
     })
 
@@ -59,6 +71,7 @@ export default (wss: Server) => {
 
     ws.on('close', () => {
       code2Ws.delete(code)
+      oppositeMap[code] = undefined
       // @ts-ignore
       clearTimeout(ws._closeTimeout)
     })
