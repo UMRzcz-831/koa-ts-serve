@@ -52,6 +52,15 @@ export default (wss: Server) => {
           // @ts-ignore
           ws.sendData('remoteNotFound', { remote })
         }
+      } else if (event === 'stop-control') {
+        console.log('stop-control')
+        code2Ws.forEach((o, k) => {
+          if (o === ws) {
+            console.log('stop-control', k)
+            // @ts-ignore
+            code2Ws.get(oppositeMap[k]).sendData('end-stream', data)
+          }
+        })
       } else if (event === 'forward') {
         code2Ws.forEach((o, k) => {
           if (o === ws) {
@@ -71,7 +80,7 @@ export default (wss: Server) => {
 
     ws.on('close', () => {
       code2Ws.delete(code)
-      oppositeMap[code] = undefined
+      delete oppositeMap[code]
       // @ts-ignore
       clearTimeout(ws._closeTimeout)
     })
